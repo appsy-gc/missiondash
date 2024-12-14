@@ -1,24 +1,36 @@
-# from init import db, ma
-# from marshmallow import fields
+from init import db, ma
+from marshmallow import fields, pre_load
+from marshmallow.validate import OneOf
 
-# class Mission(db.Model):
-#     __tablename__ = "missions"
+VALID_STATUSES = ("Planning", "Scheduled", "In Progress", "Completed - Success", "Completed - Failure")
 
-#     mission_id = db.Column(db.Integer, primary_key=True)
-#     objective = db.Column(db.String, nullable=False)
-#     location = db.Column(db.String, nullable=False)
-#     datetime = db.Column(db.DateTime, nullable=True) # Must be a datetime format DD-MM-YYYY HH:MM:SS
-#     # Foreign key from status model
-#     status_id = db.Column(db.Integer, db.ForeignKey("status.status_id"))
-#     status = db.relationship("Status", back_populates="missions")
+class Mission(db.Model):
+    __tablename__ = "missions"
 
-# class MissionSchema(ma.Schema):
-#     # Set format for datetime
-#     datetime = fields.DateTime(format="%d-%m-%Y %H:%M:%S")
-    
-#     class Meta:
-#         fields = ("mission_id", "objective", "location", "datetime", "status")
-#         ordered = True
+    mission_id = db.Column(db.Integer, primary_key=True)
+    objective = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    datetime = db.Column(db.DateTime, nullable=True) 
+    status = db.Column(db.String, nullable=False)
 
-# mission_schema = MissionSchema()
-# missions_schema = MissionSchema(many=True)
+class MissionSchema(ma.Schema):
+    # Force status name to be only a valid status
+    status = fields.String(validate=OneOf(VALID_STATUSES))
+
+    datetime = fields.DateTime(allow_none=True)
+
+    @pre_load
+    def process_empty_datetime(self, data, **kwargs):
+        """
+        Convert empty string datetime to None before validation.
+        """
+        if "datetime" in data and data["datetime"] == "":
+            data["datetime"] = None
+        return data
+     
+    class Meta:
+        fields = ("mission_id", "objective", "location", "datetime", "status")
+        ordered = True
+
+mission_schema = MissionSchema()
+missions_schema = MissionSchema(many=True)

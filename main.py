@@ -8,10 +8,8 @@ from init import db, ma
 
 # Import blueprint from cli_controller
 from controllers.cli_controller import Blueprint, db_commands
-# Import blueprint from status_controller
-from controllers.status_controller import Blueprint, statuses_bp
 # Import blueprint from mission_controller
-
+from controllers.mission_controller import Blueprint, missions_bp
 # Import blueprint from jet_controller
 
 # Import blueprint from crew_controller
@@ -49,10 +47,8 @@ def create_app():
     
     # Register cli_controller
     app.register_blueprint(db_commands)
-    # Register status_controller
-    app.register_blueprint(statuses_bp)
     # Register mission_controller
-
+    app.register_blueprint(missions_bp)
     # Register jet_controller
 
     # Register crew_controller

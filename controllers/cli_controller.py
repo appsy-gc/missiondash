@@ -1,6 +1,6 @@
 from flask import Blueprint
 from init import db
-from models.status import Status
+from models.mission import Mission
 
 db_commands = Blueprint("db", __name__)
 
@@ -19,24 +19,26 @@ def drop_tables():
 # Seed tables
 @db_commands.cli.command("seed")
 def seed_tables():
-    statuses = [
-        Status(
-            name = "Planning"
+    missions = [
+        Mission(
+            objective="Reconnaissance of Sector Alpha",
+            location="Sector Alpha",
+            datetime="2024-12-14 08:00:00",  # Use YYYY-MM-DD HH:MM:SS format
+            status="Scheduled"
         ),
-        Status(
-            name = "Scheduled"
+        Mission(
+            objective="Airspace Patrol",
+            location="Sector Bravo",
+            datetime="2024-12-15 12:30:00",
+            status="In Progress"
         ),
-        Status(
-            name = "In Progress"
-        ),
-        Status(
-            name = "Completed - Success"
-        ),
-        Status(
-            name = "Completed - Failure"
+        Mission(
+            objective="Search and Rescue Operation",
+            location="Sector Delta",
+            datetime="2024-12-16 14:45:00",
+            status="Planning"
         )
     ]
-
-    db.session.add_all(statuses)
+    db.session.add_all(missions)
     db.session.commit()
     print("Tables seeded")
