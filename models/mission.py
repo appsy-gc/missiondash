@@ -7,13 +7,16 @@ class Mission(db.Model):
     mission_id = db.Column(db.Integer, primary_key=True)
     objective = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
-    date = db.Column(db.Date)
+    datetime = db.Column(db.DateTime, nullable=True) # Must be a datetime format DD-MM-YYYY HH:MM:SS
     status = db.Column(db.String, nullable=False)
 
 class MissionSchema(ma.Schema):
-    ordered = True
+    # Set format for datetime
+    datetime = fields.DateTime(format="%d-%m-%Y %H:%M:%S")
+    
     class Meta:
-        fields = ("mission_id", "objective", "location", "date", "status")
+        fields = ("mission_id", "objective", "location", "datetime", "status")
+        ordered = True
 
 mission_schema = MissionSchema()
 missions_schema = MissionSchema(many=True)
