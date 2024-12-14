@@ -5,14 +5,14 @@ from marshmallow.validate import OneOf
 VALID_STATUSES = ("Planning", "Scheduled", "In Progress", "Completed - Success", "Completed - Failure")
 
 class Status(db.Model):
-    __tablename__ = "status"
+    __tablename__ = "statuses"
 
     status_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False, unique=True)
 
 class StatusSchema(ma.Schema):
     # Force status name to be only a valid status
-    status = fields.String(validate=OneOf(VALID_STATUSES))
+    name = fields.String(validate=OneOf(VALID_STATUSES))
 
     class Meta:
         fields = ("status_id", "name")
