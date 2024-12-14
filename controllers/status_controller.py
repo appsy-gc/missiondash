@@ -16,7 +16,16 @@ def get_statuses():
     return data
 
 # Read one - /statuses/id - GET
+@statuses_bp.route("/<int:status_id>")
+def get_status(status_id):
+    stmt = db.select(Status).filter_by(status_id=status_id)
+    status = db.session.scalar(stmt)
 
+    if status:
+        data = StatusSchema().dump(status)
+        return data
+    else:
+        return {"message": f"Status with id: {status_id} does not exist"}, 404
 
 # Create - /statuses - POST
 
