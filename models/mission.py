@@ -8,7 +8,9 @@ class Mission(db.Model):
     objective = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     datetime = db.Column(db.DateTime, nullable=True) # Must be a datetime format DD-MM-YYYY HH:MM:SS
-    status = db.Column(db.String, nullable=False)
+    # Foreign key from status model
+    status_id = db.Column(db.Integer, db.ForeignKey("status.status_id"))
+    status = db.relationship("Status", back_populates="missions")
 
 class MissionSchema(ma.Schema):
     # Set format for datetime
