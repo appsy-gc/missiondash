@@ -19,6 +19,7 @@ class MissionSchema(ma.Schema):
 
     datetime = fields.DateTime(allow_none=True)
 
+    # Custom pre-load processing method in Marshmallow to convert empty strings into None before validation occurs.
     @pre_load
     def process_empty_datetime(self, data, **kwargs):
         """

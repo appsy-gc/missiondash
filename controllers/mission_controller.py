@@ -60,6 +60,31 @@ def create_mission():
             return {"message": f"The field '{err.orig.diag.column_name}' is required"}, 409
 
 # Update - /missions/id - PUT and PATCH
+@missions_bp.route("/<int:mission_id>", methods=["PUT", "PATCH"])
+def update_mission(mission_id):
+    stmt = db.select(Mission).filter_by(mission_id=mission_id)
+    mission = db.session.scalar(stmt)
+    body_data = MissionSchema().load(request.get_json(), partial=True)
 
+    if mission:
+        mission.objective = body_data.get("objective") or mission.objective
+        mission.location = body_data.get("location") or mission.location
+        mission.datetime = body_data.get("datetime") or mission.datetime
+        mission.status = body_data.get("status") or mission.status
+        db.session.commit()
+        return MissionSchema().dump(mission)
+    else:
+        return {"message": f"Mission with id: {mission_id} does not exist"}, 404
 
 # Delete - /missions/id - DELETE
+@missions_bp.route("<int:mission_id>", methods=["DELETE"])
+def delete_mission(mission_id):
+    stmt = db.select(Mission).filter_by(mission_id=mission_id)
+    mission = db.session.scalar(stmt)
+
+    if mission:
+        db.session.delete(mission)
+        db.session.commit()
+        return {"message": f"Mission: {mission.objective} deleted successfully"}
+    else:
+        return {"message": f"Mission with id: {mission_id} does not exist"}, 404
