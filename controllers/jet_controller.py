@@ -27,16 +27,16 @@ def create_or_update_jet(jet, body_data):
 @jets_bp.route("/")
 def get_jets():
     stmt = db.select(Jet)
-    missions_list = db.session.scalars(stmt)
-    data = JetSchema(many=True).dump(missions_list)
+    jets_list = db.session.scalars(stmt)
+    data = JetSchema(many=True).dump(jets_list)
     return data
 
-# Read one - /missions/id - GET
+# Read one - /jets/id - GET
 @jets_bp.route("/<int:jet_id>")
-def get_mission(jet_id):
-    mission = get_jet_by_id(jet_id)
-    if mission:
-        data = JetSchema().dump(mission)
+def get_jet(jet_id):
+    jet = get_jet_by_id(jet_id)
+    if jet:
+        data = JetSchema().dump(jet)
         return data
     else:
         return jet_not_found(jet_id)
