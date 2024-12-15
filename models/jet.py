@@ -9,6 +9,7 @@ class Jet(db.Model):
 
     jet_id = db.Column(db.Integer, primary_key=True)
     model = db.Column(db.String, nullable=False)
+    tail_no = db.Column(db.String, nullable=False, unique=True)
     availability = db.Column(db.String, nullable=False)
     last_maint = db.Column(db.Date, nullable=False)
 
@@ -23,11 +24,21 @@ class JetSchema(ma.Schema):
             ),
         required=True
     )
+    tail_no = fields.String(
+        validate=And(
+                Length(equal=6, error="Tail number must be exactly 6 characters long."),
+                Regexp(
+                    r'^[0-9]{3}[A-Z]{3}$',
+                    error="Tail number must start with three digits followed by three uppercase letters (e.g., '666XXX')."
+                )
+            ),
+        required=True
+    )
     # Validate last_maint format
     last_maint = fields.Date(format="%Y-%m-%d", required=True)
      
     class Meta:
-        fields = ("jet_id", "model", "availability", "last_maint")
+        fields = ("jet_id", "model", "tail_no", "availability", "last_maint")
         ordered = True
 
 jet_schema = JetSchema()

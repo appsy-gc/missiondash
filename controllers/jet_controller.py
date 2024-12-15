@@ -19,6 +19,7 @@ def jet_not_found(jet_id):
 # Function to create or update information
 def create_or_update_jet(jet, body_data):
     jet.model = body_data.get("model", jet.model)
+    jet.tail_no = body_data.get("tail_no", jet.tail_no)
     jet.availability = body_data.get("availability", jet.availability)
     jet.last_maint = body_data.get("last_maint", jet.last_maint)
     return jet

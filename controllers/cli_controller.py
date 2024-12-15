@@ -43,26 +43,31 @@ def seed_tables():
     jets = [
         Jet(
             model="F16A",
+            tail_no ="696VFR",
             availability="Serviceable",
             last_maint="2024-12-01"
         ),
         Jet(
             model="B2Bomber",
+            tail_no ="222BOB",
             availability="On Mission",
             last_maint="2024-11-15"
         ),
         Jet(
             model="F22",
+            tail_no ="022RAP",
             availability="Serviceable",
             last_maint="2024-10-25"
         ),
         Jet(
             model="XWing",
+            tail_no ="999XWG",
             availability="Unserviceable",
             last_maint="2024-12-10"
         ),
         Jet(
             model="Raptor7",
+            tail_no ="007RAP",
             availability="Serviceable",
             last_maint="2024-11-30"
         )
