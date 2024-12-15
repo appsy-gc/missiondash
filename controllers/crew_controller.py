@@ -63,3 +63,14 @@ def create_crew():
 
 
 # Update - /crews/id - PUT and PATCH
+@crews_bp.route("/<int:crew_id>", methods=["PUT", "PATCH"])
+def update_crew(crew_id):
+    crew = get_crew_by_id(crew_id)
+    if not crew:
+        return crew_not_found(crew_id)
+    body_data = CrewSchema().load(request.get_json(), partial=True)
+    updated_crew = create_or_update_crew(crew, body_data)
+    db.session.commit()
+    return CrewSchema().dump(updated_crew)
+
+# Delete - /crews/id - DELETE
