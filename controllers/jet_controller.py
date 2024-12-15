@@ -34,8 +34,7 @@ def get_jets():
 def get_jet(jet_id):
     jet = get_jet_by_id(jet_id)
     if jet:
-        data = JetSchema().dump(jet)
-        return data
+        return JetSchema().dump(jet)
     else:
         return jet_not_found(jet_id)
 
