@@ -2,6 +2,7 @@ from flask import Blueprint
 from init import db
 from models.mission import Mission
 from models.jet import Jet
+from models.crew import Crew
 
 db_commands = Blueprint("db", __name__)
 
@@ -72,7 +73,25 @@ def seed_tables():
             last_maint="2024-11-30"
         )
     ]
+    crews = [
+        Crew(
+            name="Alpha"
+        ),
+        Crew(
+            name="Beta"
+        ),
+        Crew(
+            name="Charlie"
+        ),
+        Crew(
+            name="Delta"
+        ),
+        Crew(
+            name="Echo"
+        )
+    ]
     db.session.add_all(missions)
     db.session.add_all(jets)
+    db.session.add_all(crews)
     db.session.commit()
     print("Tables seeded")
