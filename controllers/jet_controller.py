@@ -80,9 +80,9 @@ def update_jet(jet_id):
 @jets_bp.route("<int:jet_id>", methods=["DELETE"])
 def delete_jet(jet_id):
     jet = get_jet_by_id(jet_id)
-    if jet:
-        db.session.delete(jet)
-        db.session.commit()
-        return {"message": f"Jet: '{jet.model}' deleted successfully"}
-    else:
+    if not jet:
         return jet_not_found(jet_id)
+    db.session.delete(jet)
+    db.session.commit()
+    return {"message": f"Jet with tail number: '{jet.tail_no}' deleted successfully"}
+        
