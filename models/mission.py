@@ -1,7 +1,6 @@
 from init import db, ma
-from marshmallow import fields, pre_load
-from marshmallow.validate import OneOf
-from marshmallow.validate import Length, And, Regexp
+from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp, OneOf
 
 VALID_STATUSES = ("Planning", "Scheduled", "In Progress", "Completed - Success", "Completed - Failure")
 
