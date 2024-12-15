@@ -11,7 +11,7 @@ from controllers.cli_controller import Blueprint, db_commands
 # Import blueprint from mission_controller
 from controllers.mission_controller import Blueprint, missions_bp
 # Import blueprint from jet_controller
-
+from controllers.jet_controller import Blueprint, jets_bp
 # Import blueprint from crew_controller
 
 # Import blueprint from assignment_controller
@@ -50,7 +50,7 @@ def create_app():
     # Register mission_controller
     app.register_blueprint(missions_bp)
     # Register jet_controller
-
+    app.register_blueprint(jets_bp)
     # Register crew_controller
 
     # Register assignment_controller
