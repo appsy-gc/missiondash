@@ -18,11 +18,12 @@ class JetSchema(ma.Schema):
     # Validation for model, availability and last_maint
     model = fields.String(
         validate=And(
-                Length(min=3, error="Name must be at least three characters long"),
-                Regexp(r'^[a-zA-Z0-9 ]+$', error="Only letters, numbers, and spaces are permitted")
+                Length(min=3, max=10, error="Name must be at least three characters long"),
+                Regexp(r'^[a-zA-Z0-9!@#$%^&*(),.?":{}|<>_-]+$', error="Only letters, numbers, and special characters are permitted. Spaces are not allowed.")
             ),
         required=True
     )
+    # Validate last_maint format
     last_maint = fields.Date(format="%Y-%m-%d", required=True)
      
     class Meta:

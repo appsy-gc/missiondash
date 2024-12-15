@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db
 from models.mission import Mission
+from models.jet import Jet
 
 db_commands = Blueprint("db", __name__)
 
@@ -39,6 +40,34 @@ def seed_tables():
             status="Planning"
         )
     ]
+    jets = [
+        Jet(
+            model="F16A",
+            availability="Serviceable",
+            last_maint="2024-12-01"
+        ),
+        Jet(
+            model="B2Bomber",
+            availability="On Mission",
+            last_maint="2024-11-15"
+        ),
+        Jet(
+            model="F22",
+            availability="Serviceable",
+            last_maint="2024-10-25"
+        ),
+        Jet(
+            model="XWing",
+            availability="Unserviceable",
+            last_maint="2024-12-10"
+        ),
+        Jet(
+            model="Raptor7",
+            availability="Serviceable",
+            last_maint="2024-11-30"
+        )
+    ]
     db.session.add_all(missions)
+    db.session.add_all(jets)
     db.session.commit()
     print("Tables seeded")
