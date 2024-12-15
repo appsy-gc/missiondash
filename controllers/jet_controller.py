@@ -41,18 +41,18 @@ def get_jet(jet_id):
     else:
         return jet_not_found(jet_id)
 
-# Create - /missions - POST
+# Create - /jets - POST
 @jets_bp.route("/", methods=["POST"])
-def create_mission():
+def create_jet():
     try:
         # Get information from request body
         body_data = JetSchema().load(request.get_json())
-        # Create mission instance
-        new_mission = create_or_update_mission(Mission(), body_data)
-        # Add new mission and commit
-        db.session.add(new_mission)
+        # Create jet instance
+        new_jet = create_or_update_jet(Jet(), body_data)
+        # Add new jet and commit
+        db.session.add(new_jet)
         db.session.commit()
-        return JetSchema().dump(new_mission), 201   
+        return JetSchema().dump(new_jet), 201   
     except ValidationError as err:
         # Catch and handle validation errors
         return {"message": err.messages}, 400    
