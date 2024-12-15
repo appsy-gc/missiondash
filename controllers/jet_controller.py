@@ -64,25 +64,25 @@ def create_jet():
             return {"message": f"The field '{err.orig.diag.column_name}' is required"}, 409
         return {"message": "An unexpected database error occurred."}, 500
 
-# Update - /missions/id - PUT and PATCH
+# Update - /jets/id - PUT and PATCH
 @jets_bp.route("/<int:jet_id>", methods=["PUT", "PATCH"])
-def update_mission(jet_id):
-    mission = get_jet_by_id(jet_id)
+def update_jet(jet_id):
+    jet = get_jet_by_id(jet_id)
     body_data = JetSchema().load(request.get_json(), partial=True)
-    if not mission:
+    if not jet:
         return jet_not_found(jet_id)
     body_data = JetSchema().load(request.get_json(), partial=True)
-    updated_mission = create_or_update_jet(mission, body_data)
+    updated_jet = create_or_update_jet(jet, body_data)
     db.session.commit()
-    return JetSchema().dump(updated_mission)
+    return JetSchema().dump(updated_jet)
 
-# Delete - /missions/id - DELETE
+# Delete - /jets/id - DELETE
 @jets_bp.route("<int:jet_id>", methods=["DELETE"])
-def delete_mission(jet_id):
-    mission = get_jet_by_id(jet_id)
-    if mission:
-        db.session.delete(mission)
+def delete_jet(jet_id):
+    jet = get_jet_by_id(jet_id)
+    if jet:
+        db.session.delete(jet)
         db.session.commit()
-        return {"message": f"Mission: '{mission.objective}' deleted successfully"}
+        return {"message": f"Jet: '{jet.model}' deleted successfully"}
     else:
         return jet_not_found(jet_id)
