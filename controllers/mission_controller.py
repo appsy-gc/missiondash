@@ -17,11 +17,15 @@ def mission_not_found(mission_id):
     return {"message": f"Mission with id: {mission_id} does not exist"}, 404
 
 # Function to create or update information
+# def create_or_update_jet(jet, body_data):
+#     for attr in ["model", "tail_no", "availability", "last_maint"]:
+#         setattr(jet, attr, body_data.get(attr, getattr(jet, attr)))
+#     return jet
+
+# Function to create or update information
 def create_or_update_mission(mission, body_data):
-    mission.objective = body_data.get("objective", mission.objective)
-    mission.location = body_data.get("location", mission.location)
-    mission.datetime = body_data.get("datetime", mission.datetime)
-    mission.status = body_data.get("status", mission.status)
+    for attr in ["objective", "location", "datetime", "status"]:
+        setattr(mission, attr, body_data.get(attr, getattr(mission, attr)))
     return mission
 
 # Read all - /missions - GET

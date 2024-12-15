@@ -4,6 +4,12 @@ from marshmallow.validate import Length, And, Regexp, OneOf
 
 VALID_AVAILABILITY = ("Serviceable", "Unserviceable", "On Mission")
 
+def string_validator(min_length=3, max_length=10, regex=None, error_message=None):
+    return And(
+        Length(min=min_length, max=max_length, error=f"Value must be between min: {min_length} and max: {max_length} characters."),
+        Regexp(regex, error=error_message or "Invalid format.")
+    )
+
 class Jet(db.Model):
     __tablename__ = "jets"
 
@@ -15,23 +21,22 @@ class Jet(db.Model):
 
 class JetSchema(ma.Schema):
     # Force availability name to be only a valid availabiliity
-    availability = fields.String(validate=OneOf(VALID_AVAILABILITY))
+    availability = fields.String(validate=OneOf(VALID_AVAILABILITY), required=True)
     # Validation for model, availability and last_maint
     model = fields.String(
-        validate=And(
-                Length(min=3, max=10, error="Name must be at least three characters long"),
-                Regexp(r'^[a-zA-Z0-9!@#$%^&*(),.?":{}|<>_-]+$', error="Only letters, numbers, and special characters are permitted. Spaces are not allowed.")
-            ),
+        validate=string_validator(
+            regex=r'^[a-zA-Z0-9!@#$%^&*(),.?":{}|<>_-]+$',
+            error_message="Only letters, numbers, and special characters are permitted. Spaces are not allowed."
+        ),
         required=True
     )
     tail_no = fields.String(
-        validate=And(
-                Length(equal=6, error="Tail number must be exactly 6 characters long."),
-                Regexp(
-                    r'^[0-9]{3}[A-Z]{3}$',
-                    error="Tail number must start with three digits followed by three uppercase letters (e.g., '666XXX')."
-                )
-            ),
+        validate=string_validator(
+            regex=r'^[0-9]{3}[A-Z]{3}$',
+            error_message="Tail number must start with three digits followed by three uppercase letters (e.g., '666XXX').",
+            min_length=6,
+            max_length=6
+        ),
         required=True
     )
     # Validate last_maint format
