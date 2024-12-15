@@ -63,6 +63,9 @@ def create_jet():
             # not_null_violoation
             # Return specific field that is in violoation
             return {"message": f"The field '{err.orig.diag.column_name}' is required"}, 409
+        if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
+            tail_no = body_data.get("tail_no", "unknown")
+            return {"message": f"Jet with tail number: '{tail_no}' already exists"}, 409
         return {"message": "An unexpected database error occurred."}, 500
 
 # Update - /jets/id - PUT and PATCH
