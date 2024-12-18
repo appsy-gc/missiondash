@@ -9,7 +9,7 @@ class CrewMember(db.Model):
     __tablename__ = "crew_members"
 
     crew_member_id = db.Column(db.Integer, primary_key=True)
-    crew_id = db.Column(db.Integer, db.ForeignKey("crews.crew_id"))
+    crew_id = db.Column(db.Integer, db.ForeignKey("crews.crew_id", ondelete="CASCADE"))
     crew = db.relationship("Crew", back_populates="crew_members")
     name = db.Column(db.String(100), nullable=False, unique=True)
     role = db.Column(db.String(100), nullable=False)

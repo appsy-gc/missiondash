@@ -3,6 +3,7 @@ from init import db
 from models.mission import Mission
 from models.jet import Jet
 from models.crew import Crew
+from models.crew_member import CrewMember
 
 db_commands = Blueprint("db", __name__)
 
@@ -90,8 +91,50 @@ def seed_tables():
             name="Echo"
         )
     ]
+    db.session.add_all(crews)
+    db.session.commit()
+
+    crew_members = [
+        CrewMember(
+            crew_id=1,
+            name="John Smith",
+            role="Pilot",
+            availability="Available"
+        ),
+        CrewMember(
+            crew_id=1,
+            name="Alice Johnson",
+            role="Commander",
+            availability="On Mission"
+        ),
+        CrewMember(
+            crew_id=2,
+            name="Robert Brown",
+            role="Flight Engineer",
+            availability="In Training"
+        ),
+        CrewMember(
+            crew_id=2,
+            name="Emily Davis",
+            role="Navigator",
+            availability="On Leave"
+        ),
+        CrewMember(
+            crew_id=3,
+            name="Michael Taylor",
+            role="Weapons Specialist",
+            availability="Unavailable"
+        ),
+        CrewMember(
+            crew_id=3,
+            name="Sarah Wilson",
+            role="Pilot",
+            availability="Retired"
+        )
+    ]
+
     db.session.add_all(missions)
     db.session.add_all(jets)
-    db.session.add_all(crews)
+    db.session.add_all(crew_members)
     db.session.commit()
     print("Tables seeded")
