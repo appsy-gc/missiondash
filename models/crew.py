@@ -1,6 +1,6 @@
 from init import db, ma
 from marshmallow import fields
-from marshmallow.validate import Length, And, Regexp
+from marshmallow.validate import Length, Regexp
 
 class Crew(db.Model):
     __tablename__ = "crews"
