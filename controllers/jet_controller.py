@@ -68,7 +68,6 @@ def create_jet():
 @jets_bp.route("/<int:jet_id>", methods=["PUT", "PATCH"])
 def update_jet(jet_id):
     jet = get_jet_by_id(jet_id)
-    body_data = JetSchema().load(request.get_json(), partial=True)
     if not jet:
         return jet_not_found(jet_id)
     body_data = JetSchema().load(request.get_json(), partial=True)
