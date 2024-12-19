@@ -15,7 +15,7 @@ from controllers.jet_controller import Blueprint, jets_bp
 # Import blueprint from crew_controller
 from controllers.crew_controller import Blueprint, crews_bp
 # Import blueprint from crew_member_controller
-
+from controllers.crew_member_controller import Blueprint, crew_members_bp
 # Import blueprint from assignment_controller
 
 def create_app():
@@ -56,7 +56,7 @@ def create_app():
     # Register crew_controller
     app.register_blueprint(crews_bp)
     # Register crew_member_controller
-
+    app.register_blueprint(crew_members_bp)
     # Register assignment_controller
 
 

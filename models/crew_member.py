@@ -32,10 +32,10 @@ class CrewMemberSchema(ma.Schema):
     # Validation for crew member availability
     availability = fields.String(validate=OneOf(VALID_AVAILABILITY), required=True)
 
-    crew = fields.List(fields.Nested("CrewSchema", only=["name"]))
+    crew = fields.Nested("CrewSchema", only=["name"])
      
     class Meta:
-        fields = ("crew_member_id", "crew_id", "name", "role", "availability")
+        fields = ("crew_member_id", "crew", "name", "role", "availability")
         ordered = True
 
 crew_member_schema = CrewMemberSchema()
