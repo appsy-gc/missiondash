@@ -17,7 +17,10 @@ def crew_member_not_found_message(crew_member_id):
     return {"message": f"Crew member with id: {crew_member_id} does not exist"}, 404
 
 # Function to create or update information
-
+def create_or_update_crew_member(crew_member, body_data):
+    for attr in ["crew_id", "name", "role", "availability"]:
+        setattr(crew_member, attr, body_data.get(attr, getattr(crew_member, attr)))
+    return crew_member
 
 # Read all - /crew_members - GET
 @crew_members_bp.route("/", methods=["GET"])
@@ -38,6 +41,26 @@ def get_crew_member(crew_member_id):
 
 
 # Create - /crew_members - POST
+@crew_members_bp.route("/", methods=["POST"])
+def create_crew_member():
+    try:
+        # Get information from request body
+        body_data = CrewMemberSchema().load(request.get_json())
+        # Create crew member instance
+        new_crew_member = create_or_update_crew_member(CrewMember(), body_data)
+        # Add new crew member and commit
+        db.session.add(new_crew_member)
+        db.session.commit()
+        return CrewMemberSchema().dump(new_crew_member)
+    except IntegrityError as err:
+        print(err.orig.pgcode)
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            # not_null_violoation
+            # Return specific field that is in violoation
+            return {"message": f"The field '{err.orig.diag.column_name}' is required"}, 409
+        if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
+            # unique_constraint_violoation
+            return {"message": err.orig.diag.message_detail}, 409
 
 
 # Update - /crew_members/id - PUT and PATCH
