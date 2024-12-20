@@ -6,11 +6,11 @@ class Assignment(db.Model):
     __tablename__ = "assignments"
 
     assign_id = db.Column(db.Integer, primary_key=True)
-    mission_id = db.Column(db.Integer, db.ForeignKey("missions.mission_id", ondelete="CASCADE"))
+    mission_id = db.Column(db.Integer, db.ForeignKey("missions.mission_id", ondelete="CASCADE"), nullable=False)
     mission = db.relationship("Mission", back_populates="assignments")
-    jet_id = db.Column(db.Integer, db.ForeignKey("jets.jet_id", ondelete="CASCADE"))
+    jet_id = db.Column(db.Integer, db.ForeignKey("jets.jet_id", ondelete="CASCADE"), nullable=False)
     jet = db.relationship("Jet", back_populates="assignments")
-    crew_id = db.Column(db.Integer, db.ForeignKey("crews.crew_id", ondelete="CASCADE"))
+    crew_id = db.Column(db.Integer, db.ForeignKey("crews.crew_id", ondelete="CASCADE"), nullable=False)
     crew = db.relationship("Crew", back_populates="assignments")
     
 

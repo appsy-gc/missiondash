@@ -9,7 +9,7 @@ assignments_bp = Blueprint("assignments", __name__, url_prefix="/assignments")
 
 # Function to get assign id
 def get_assign_id(assign_id):
-    stmt = db.select(Assignment).filter_by(assign_id=assign_id)
+    stmt = db.select(Assignment).filter_by(assign_id=assign_id).order_by(Assignment.assign_id)
     return db.session.scalar(stmt)
 
 # Function to send assignment not found message
@@ -31,11 +31,32 @@ def get_assignments():
 
 
 # Read one - /assignments/id - GET
-
+@assignments_bp.route("/<int:assign_id>")
+def get_assignment(assign_id):
+    assignment = get_assign_id(assign_id)
+    if not assignment:
+        return assign_not_found_message(assign_id)
+    return AssignmentSchema().dump(assignment)
 
 
 # Create - /assignments - POST
-
+@assignments_bp.route("/", methods=["POST"])
+def create_assignment():
+    try:
+        body_data = AssignmentSchema().load(request.get_json())
+        new_assignment = create_or_update_assign(Assignment(), body_data)
+        db.session.add(new_assignment)
+        db.session.commit()
+        return AssignmentSchema().dump(new_assignment)
+    except ValidationError as err:
+        # Catch and handle validation errors
+        return {"message": err.messages}, 400    
+    except IntegrityError as err:
+        print(err.orig.pgcode)
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            # not_null_violoation
+            # Return specific field that is in violoation
+            return {"message": f"The field '{err.orig.diag.column_name}' is required"}, 409
 
 
 # Update - /assignments/id - PUT and PATCH
