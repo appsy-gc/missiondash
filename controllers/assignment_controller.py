@@ -73,3 +73,11 @@ def update_assignment(assign_id):
     
 
 # Delete - /assignments/id - DELETE
+@assignments_bp.route("/<int:assign_id>", methods=["DELETE"])
+def delete_assignment(assign_id):
+    assignment = get_assign_id(assign_id)
+    if not assignment:
+        return assign_not_found_message(assign_id)
+    db.session.delete(assignment)
+    db.session.commit()
+    return {"message": f"Assignment with id: '{assign_id}' successfully deleted"}
