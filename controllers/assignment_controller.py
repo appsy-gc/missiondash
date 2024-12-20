@@ -60,7 +60,16 @@ def create_assignment():
 
 
 # Update - /assignments/id - PUT and PATCH
-
+@assignments_bp.route("/<int:assign_id>", methods=["PUT", "PATCH"])
+def update_assignment(assign_id):
+    assignment = get_assign_id(assign_id)
+    if not assignment:
+        return assign_not_found_message(assign_id)
+    body_data = AssignmentSchema().load(request.get_json(), partial=True)
+    updated_assignment = create_or_update_assign(assignment, body_data)
+    db.session.commit()
+    return AssignmentSchema().dump(updated_assignment)
+    
     
 
 # Delete - /assignments/id - DELETE

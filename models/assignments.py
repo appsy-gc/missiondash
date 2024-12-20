@@ -1,6 +1,19 @@
 from init import db, ma
 from marshmallow import fields, validates, ValidationError
+from models.mission import Mission
+from models.jet import Jet
+from models.crew import Crew
 from marshmallow.validate import Length, Regexp, OneOf
+
+def validate_id(model, value, field_name):
+    # Check if the ID is an integer and not empty
+    if not isinstance(value, int):
+        raise ValidationError(f"{field_name} must be a valid integer.")
+    # Check if the ID exists in the database
+    instance = db.session.get(model, value)
+    if not instance:
+        raise ValidationError(f"{field_name} with ID {value} does not exist.")
+
 
 class Assignment(db.Model):
     __tablename__ = "assignments"
@@ -23,6 +36,18 @@ class AssignmentSchema(ma.Schema):
     class Meta:
         fields = ("assign_id", "mission_id", "mission", "jet_id", "jet", "crew_id", "crew")
         ordered = True
+
+    @validates("mission_id")
+    def validate_mission_id(self, value):
+        validate_id(Mission, value, "Mission ID")
+
+    @validates("jet_id")
+    def validate_jet_id(self, value):
+        validate_id(Jet, value, "Jet ID")
+    
+    @validates("crew_id")
+    def validate_crew_id(self, value):
+            validate_id(Crew, value, "Crew ID")
 
 assignment_schema = AssignmentSchema()
 assignments_schema = AssignmentSchema(many=True)

@@ -67,7 +67,6 @@ def create_mission():
 @missions_bp.route("/<int:mission_id>", methods=["PUT", "PATCH"])
 def update_mission(mission_id):
     mission = get_mission_by_id(mission_id)
-    body_data = MissionSchema().load(request.get_json(), partial=True)
     if not mission:
         return mission_not_found(mission_id)
     body_data = MissionSchema().load(request.get_json(), partial=True)
