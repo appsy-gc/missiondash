@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from init import db
-from models.crew import Crew, CrewSchema
+from models.crew import Crew, CrewSchema, crews_schema
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 from marshmallow.exceptions import ValidationError
@@ -22,9 +22,9 @@ def create_or_update_crew(crew, body_data):
 # Read all - /crews - GET
 @crews_bp.route("/")
 def get_crews():
-    stmt = db.select(Crew)
+    stmt = db.select(Crew).order_by(Crew.crew_id)
     crews_list = db.session.scalars(stmt)
-    return CrewSchema(many=True).dump(crews_list)
+    return crews_schema.dump(crews_list), 200
 
 # Read one - /crews/id - GET
 @crews_bp.route("/<int:crew_id>")

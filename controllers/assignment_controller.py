@@ -23,7 +23,11 @@ def create_or_update_assign(assign, body_data):
     return assign
 
 # Read all - /assignments - GET
-
+@assignments_bp.route("/")
+def get_assignments():
+    stmt = db.select(Assignment).order_by(Assignment.assign_id)
+    assignments_list = db.session.scalars(stmt)
+    return AssignmentSchema(many=True).dump(assignments_list)
 
 
 # Read one - /assignments/id - GET

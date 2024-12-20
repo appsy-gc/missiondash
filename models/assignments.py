@@ -15,8 +15,13 @@ class Assignment(db.Model):
     
 
 class AssignmentSchema(ma.Schema):
+
+    mission = fields.Nested("MissionSchema", exclude=["mission_id"])
+    jet = fields.Nested("JetSchema", exclude=["jet_id"])
+    crew = fields.Nested("CrewSchema", exclude=["crew_id"])
+
     class Meta:
-        fields = ("assign_id", "mission_id", "jet_id", "crew_id")
+        fields = ("assign_id", "mission_id", "mission", "jet_id", "jet", "crew_id", "crew")
         ordered = True
 
 assignment_schema = AssignmentSchema()

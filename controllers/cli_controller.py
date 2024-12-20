@@ -140,19 +140,19 @@ def seed_tables():
 
     assignments = [
         Assignment(
-            crew_id=1,
             jet_id=1,
-            mission_id=1
+            mission_id=1,
+            crew_id=1
         ),
         Assignment(
-            crew_id=2,
             jet_id=3,
-            mission_id=2
+            mission_id=2,
+            crew_id=3
         ),
         Assignment(
-            crew_id=3,
             jet_id=2,
-            mission_id=3
+            mission_id=3,
+            crew_id=5
         )
     ]
     db.session.add_all(assignments)

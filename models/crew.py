@@ -22,9 +22,11 @@ class CrewSchema(ma.Schema):
         ],
         required=True   
     )
+
+    crew_members = fields.List(fields.Nested("CrewMemberSchema", exclude=["crew"]))
      
     class Meta:
-        fields = ("crew_id", "name")
+        fields = ("crew_id", "name", "crew_members")
         ordered = True
 
 crew_schema = CrewSchema()
