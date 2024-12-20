@@ -4,6 +4,7 @@ from models.mission import Mission
 from models.jet import Jet
 from models.crew import Crew
 from models.crew_member import CrewMember
+from models.assignments import Assignment
 
 db_commands = Blueprint("db", __name__)
 
@@ -136,5 +137,24 @@ def seed_tables():
     db.session.add_all(missions)
     db.session.add_all(jets)
     db.session.add_all(crew_members)
+
+    assignments = [
+        Assignment(
+            crew_id=1,
+            jet_id=1,
+            mission_id=1
+        ),
+        Assignment(
+            crew_id=2,
+            jet_id=3,
+            mission_id=2
+        ),
+        Assignment(
+            crew_id=3,
+            jet_id=2,
+            mission_id=3
+        )
+    ]
+    db.session.add_all(assignments)
     db.session.commit()
     print("Tables seeded")

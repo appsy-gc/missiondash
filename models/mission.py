@@ -24,6 +24,7 @@ class Mission(db.Model):
     location = db.Column(db.String, nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String, nullable=False)
+    assignments = db.relationship("Assignment", back_populates="mission", cascade="all, delete-orphan")
 
 class MissionSchema(ma.Schema):
     # Force status name to be only a valid status

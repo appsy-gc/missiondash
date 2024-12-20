@@ -17,6 +17,7 @@ from controllers.crew_controller import Blueprint, crews_bp
 # Import blueprint from crew_member_controller
 from controllers.crew_member_controller import Blueprint, crew_members_bp
 # Import blueprint from assignment_controller
+from controllers.assignment_controller import Blueprint, assignments_bp
 
 def create_app():
     app = Flask(__name__)
@@ -58,6 +59,6 @@ def create_app():
     # Register crew_member_controller
     app.register_blueprint(crew_members_bp)
     # Register assignment_controller
-
+    app.register_blueprint(assignments_bp)
 
     return app

@@ -18,6 +18,7 @@ class Jet(db.Model):
     tail_no = db.Column(db.String, nullable=False, unique=True)
     availability = db.Column(db.String, nullable=False)
     last_maint = db.Column(db.Date, nullable=False)
+    assignments = db.relationship("Assignment", back_populates="jet", cascade="all, delete-orphan")
 
 class JetSchema(ma.Schema):
     # Force availability name to be only a valid availabiliity

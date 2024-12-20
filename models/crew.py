@@ -8,6 +8,7 @@ class Crew(db.Model):
     crew_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     crew_members = db.relationship("CrewMember", back_populates="crew", cascade="all, delete-orphan")
+    assignments = db.relationship("Assignment", back_populates="crew", cascade="all, delete-orphan")
 
 class CrewSchema(ma.Schema):
     # Validation for crew name
