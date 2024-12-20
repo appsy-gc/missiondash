@@ -23,20 +23,19 @@ def create_or_update_jet(jet, body_data):
     return jet
 
 # Read all - /jets - GET
-@jets_bp.route("/")
+@jets_bp.route("/", methods=["GET"])
 def get_jets():
     stmt = db.select(Jet)
     jets_list = db.session.scalars(stmt)
     return JetSchema(many=True).dump(jets_list)
 
 # Read one - /jets/id - GET
-@jets_bp.route("/<int:jet_id>")
+@jets_bp.route("/<int:jet_id>", methods=["GET"])
 def get_jet(jet_id):
     jet = get_jet_by_id(jet_id)
-    if jet:
-        return JetSchema().dump(jet)
-    else:
+    if not jet:
         return jet_not_found(jet_id)
+    return JetSchema().dump(jet)
 
 # Create - /jets - POST
 @jets_bp.route("/", methods=["POST"])

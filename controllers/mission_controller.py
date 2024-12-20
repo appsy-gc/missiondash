@@ -23,7 +23,7 @@ def create_or_update_mission(mission, body_data):
     return mission
 
 # Read all - /missions - GET
-@missions_bp.route("/")
+@missions_bp.route("/", methods=["GET"])
 def get_missions():
     stmt = db.select(Mission)
     missions_list = db.session.scalars(stmt)
@@ -31,14 +31,12 @@ def get_missions():
     return data
 
 # Read one - /missions/id - GET
-@missions_bp.route("/<int:mission_id>")
+@missions_bp.route("/<int:mission_id>", methods=["GET"])
 def get_mission(mission_id):
     mission = get_mission_by_id(mission_id)
-    if mission:
-        data = MissionSchema().dump(mission)
-        return data
-    else:
+    if not mission:
         return mission_not_found(mission_id)
+    return MissionSchema().dump(mission)
 
 # Create - /missions - POST
 @missions_bp.route("/", methods=["POST"])
@@ -78,9 +76,8 @@ def update_mission(mission_id):
 @missions_bp.route("<int:mission_id>", methods=["DELETE"])
 def delete_mission(mission_id):
     mission = get_mission_by_id(mission_id)
-    if mission:
-        db.session.delete(mission)
-        db.session.commit()
-        return {"message": f"Mission: '{mission.objective}' deleted successfully"}
-    else:
+    if not mission:
         return mission_not_found(mission_id)
+    db.session.delete(mission)
+    db.session.commit()
+    return {"message": f"Mission: '{mission.objective}' deleted successfully"}

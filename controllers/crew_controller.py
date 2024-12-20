@@ -20,20 +20,19 @@ def create_or_update_crew(crew, body_data):
     return crew
 
 # Read all - /crews - GET
-@crews_bp.route("/")
+@crews_bp.route("/", methods=["GET"])
 def get_crews():
     stmt = db.select(Crew).order_by(Crew.crew_id)
     crews_list = db.session.scalars(stmt)
     return crews_schema.dump(crews_list), 200
 
 # Read one - /crews/id - GET
-@crews_bp.route("/<int:crew_id>")
+@crews_bp.route("/<int:crew_id>", methods=["GET"])
 def get_crew(crew_id):
     crew = get_crew_by_id(crew_id)
-    if crew:
-        return CrewSchema().dump(crew)
-    else:
+    if not crew:
         return crew_not_found(crew_id)
+    return CrewSchema().dump(crew)
 
 # Create - /crews - POST
 @crews_bp.route("/", methods=["POST"])

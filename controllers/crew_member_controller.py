@@ -34,10 +34,9 @@ def get_crew_members():
 @crew_members_bp.route("/<int:crew_member_id>", methods=["GET"])
 def get_crew_member(crew_member_id):
     crew_member = get_crew_member_id(crew_member_id)
-    if crew_member:
-        return CrewMemberSchema().dump(crew_member)
-    else:
+    if not crew_member:
         return crew_member_not_found_message(crew_member_id)
+    return CrewMemberSchema().dump(crew_member)
 
 
 # Create - /crew_members - POST
