@@ -74,6 +74,13 @@ def update_crew_member(crew_member_id):
     db.session.commit()
     return CrewMemberSchema().dump(updated_crew_member)
     
-    
 
 # Delete - /crew_members/id - DELETE
+@crew_members_bp.route("<int:crew_members_id>", methods=["DELETE"])
+def delete_crew_member(crew_members_id):
+    crew_member = get_crew_member_id(crew_members_id)
+    if not crew_member:
+        return crew_member_not_found_message(crew_members_id)
+    db.session.delete(crew_member)
+    db.session.commit()
+    return {"message": f"crew_member with name: '{crew_member.name}' deleted successfully"}
