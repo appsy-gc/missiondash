@@ -74,6 +74,11 @@ class AssignmentSchema(ma.Schema):
         jet = db.session.get(Jet, data["jet_id"])
         if not jet:
             raise ValidationError("Jet does not exist.", field_name="jet_id")
+        
+        # Fetch the mission
+        mission = db.session.get(Mission, data["mission_id"])
+        if not mission:
+            raise ValidationError("Mission does not exist.", field_name="mission_id")
 
         crew_members = CrewMember.query.filter_by(crew_id=data["crew_id"]).all()
 
@@ -105,6 +110,13 @@ class AssignmentSchema(ma.Schema):
             raise ValidationError(
                 f"The jet is currently {jet.availability.lower()} and cannot be assigned.",
                 field_name="jet_id",
+            )
+        
+        # 5. Check if mission status is planning before allowing assignment
+        if mission.status not in ["Planning"]:
+            raise ValidationError(
+                f"The mission is currently {mission.status.lower()} and cannot be scheduled",
+                field_name="mission_id"
             )
 
 assignment_schema = AssignmentSchema()

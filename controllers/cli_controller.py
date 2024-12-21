@@ -28,40 +28,46 @@ def seed_tables():
             objective="Reconnaissance of Sector Alpha",
             location="Sector Alpha",
             datetime="2024-12-14 08:00:00",  # Use YYYY-MM-DD HH:MM:SS format
-            status="Scheduled"
+            status="Planning"
         ),
         Mission(
             objective="Airspace Patrol",
             location="Sector Bravo",
             datetime="2024-12-15 12:30:00",
-            status="In Progress"
+            status="Planning"
         ),
         Mission(
             objective="Search and Rescue Operation",
             location="Sector Delta",
             datetime="2024-12-16 14:45:00",
             status="Planning"
+        ),
+        Mission(
+            objective="Routine Perimeter Sweep",
+            location="Home base",
+            datetime="2024-12-26 14:45:00",
+            status="Completed - Success"
         )
     ]
     jets = [
         Jet(
             model="F16A",
             tail_no ="696VFR",
-            availability="Serviceable",
+            availability="On Mission",
             capacity=1,
             last_maint="2024-12-01"
         ),
         Jet(
             model="B2Bomber",
             tail_no ="222BOB",
-            availability="Serviceable",
+            availability="On Mission",
             capacity=2,
             last_maint="2024-11-15"
         ),
         Jet(
             model="C17Globemaster",
             tail_no ="001GBM",
-            availability="Serviceable",
+            availability="On Mission",
             capacity=3,
             last_maint="2024-11-30"
         )
@@ -91,37 +97,37 @@ def seed_tables():
             crew_id=1,
             name="John Smith",
             role="Pilot",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=2,
             name="Alice Johnson",
             role="Co-pilot",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=3,
             name="Robert Brown",
             role="Co-pilot",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=3,
             name="Emily Davis",
             role="Pilot",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=3,
             name="Michael Taylor",
             role="Loadmaster",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=2,
             name="Sarah Wilson",
             role="Pilot",
-            availability="Available"
+            availability="On Mission"
         ),
         CrewMember(
             crew_id=4,
