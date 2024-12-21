@@ -6,6 +6,9 @@ This application manages missions, jets, crews, crew members, and their assignme
 
 ## Entities and Relationships
 
+### Entity Relationship Diagram
+![ERD](media/missiondasherd.jpg)
+
 ### Entities
 
 1. **Mission**
@@ -68,11 +71,11 @@ cd <repository-folder>
 
 Create a virtual environment:
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 Activate the virtual environment:
-- **Windows**: `venv\Scripts\activate`
-- **macOS/Linux**: `source venv/bin/activate`
+- **Windows**: `.venv\Scripts\activate`
+- **macOS/Linux**: `source .venv/bin/activate`
 
 #### 5. Install Dependencies
 
@@ -88,7 +91,7 @@ Create a `.env` file in the project root with the following content:
 DATABASE_URI=<your-database-uri>
 ```
 
-#### 7. Initialize the Database
+#### 7. Initialise the Database
 
 Run the following commands to create and seed the database:
 ```bash
@@ -178,11 +181,42 @@ db.session.add(new_assignment)
 db.session.commit()
 ```
 
+## Feedback
+
+### General Feedback
+
+- **Strengths**:
+  - The purpose is clear and well-articulated, making it easy to understand the project's goals.
+  - Comprehensive scope and database design.
+  - The Entity-Relationship Diagram (ERD) is well-structured and easy to follow.
+
+- **Areas for Improvement**:
+  - Consider allowing more than one jet and crew to be assigned to a mission for enhanced flexibility.
+
+### Jet Model, Schema, and Controller Feedback
+
+- **Strengths**:
+  - Excellent use of error handling with Marshmallow validation and SQLAlchemy IntegrityError.
+  - Clear and informative response messages for API users.
+  - The `string_validator` function promotes code reusability and adheres to DRY principles.
+
+- **Areas for Improvement**:
+  - Add explicit field lengths to all string fields for additional database-level validation.
+  - Implement consistent use of `["GET"]` method in route decorators to enhance readability.
+
+### Updates Implemented Based on Feedback
+
+- Added explicit length constraints to all string fields in models.
+- Ensured all `GET` routes include the `["GET"]` method for clarity.
+- Fixed duplicate code in the `update_jet` function.
+
 ## Additional Notes
 
 - For any issues, refer to the Flask app logs or database logs.
 - Make sure your `.env` file is correctly configured for database connectivity.
 
 ---
+
 End of README
+
 
