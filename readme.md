@@ -1,200 +1,188 @@
-# Mission Management System
+# App README
 
 ## Purpose
-The Mission Management System is a Flask-based web application designed to efficiently manage military or aviation-related missions. It handles the coordination of missions, jets, crews, and assignments while ensuring data validation and consistency. This app supports CRUD (Create, Read, Update, Delete) operations for all entities and provides robust validation to maintain data integrity.
 
----
+This application manages missions, jets, crews, crew members, and their assignments in a flight operation context. It allows users to create, update, retrieve, and delete data related to these entities while ensuring all validation rules are enforced. This app is built using Python, Flask, and SQLAlchemy with Marshmallow for schema validation.
 
-## Entities and Their Relationships
+## Entities and Relationships
 
 ### Entities
+
 1. **Mission**
-   - Represents a task or operation.
-   - Attributes: `mission_id`, `objective`, `location`, `datetime`, `status`.
+   - Attributes: `mission_id`, `objective`, `location`, `datetime`, `status`
+   - Relationships: One-to-many with Assignments
 
 2. **Jet**
-   - Represents a specific aircraft.
-   - Attributes: `jet_id`, `model`, `tail_no`, `availability`, `capacity`, `last_maint`.
+   - Attributes: `jet_id`, `model`, `tail_no`, `availability`, `capacity`, `last_maint`
+   - Relationships: One-to-many with Assignments
 
 3. **Crew**
-   - Represents a group of personnel.
-   - Attributes: `crew_id`, `name`, `crew_members`.
+   - Attributes: `crew_id`, `name`
+   - Relationships: One-to-many with Crew Members, one-to-many with Assignments
 
-4. **CrewMember**
-   - Represents an individual team member.
-   - Attributes: `crew_member_id`, `crew_id`, `name`, `role`, `availability`.
+4. **Crew Member**
+   - Attributes: `crew_member_id`, `crew_id`, `name`, `role`, `availability`
+   - Relationships: Many-to-one with Crew
 
 5. **Assignment**
-   - Links missions, jets, and crews.
-   - Attributes: `assign_id`, `mission_id`, `jet_id`, `crew_id`.
+   - Attributes: `assign_id`, `mission_id`, `jet_id`, `crew_id`
+   - Relationships: Many-to-one with Mission, Jet, and Crew
 
 ### Relationships
-- **Mission ↔ Assignment**: A mission can have multiple assignments.
-- **Jet ↔ Assignment**: A jet can be used in multiple assignments.
-- **Crew ↔ Assignment**: A crew can participate in multiple assignments.
-- **Crew ↔ CrewMember**: A crew has multiple members.
 
----
+- **Mission** is linked to **Assignment** (one-to-many).
+- **Jet** is linked to **Assignment** (one-to-many).
+- **Crew** is linked to **Assignment** (one-to-many) and **Crew Member** (one-to-many).
+- **Assignment** combines Mission, Jet, and Crew in a one-to-many relationship.
 
 ## Installation Instructions
 
-### Step 1: Install Required Software
-1. Download and install [Python](https://www.python.org/downloads/).
-2. Download and install [Visual Studio Code (VS Code)](https://code.visualstudio.com/).
+### Prerequisites
 
-### Step 2: Set Up the Environment
+- A computer with internet access
+- **Operating System**: Windows, macOS, or Linux
+- **Python**: Version 3.10+
 
-#### 1. Install `pip`
-`pip` is usually included with Python. Verify installation by running:
+### Step-by-Step Guide
+
+#### 1. Install Python
+
+Download Python from the [official website](https://www.python.org/) and install it. Ensure you add Python to your PATH during the installation.
+
+#### 2. Install VS Code
+
+Download and install [Visual Studio Code](https://code.visualstudio.com/). Install the "Python" extension for VS Code.
+
+#### 3. Clone the Repository
+
+Open the terminal and run the following command to clone the repository:
 ```bash
-pip --version
+git clone <repository-url>
+```
+Navigate to the project folder:
+```bash
+cd <repository-folder>
 ```
 
-#### 2. Install Virtual Environment
-Create and activate a virtual environment:
+#### 4. Set Up a Virtual Environment
+
+Create a virtual environment:
 ```bash
-# Create a virtual environment
 python -m venv venv
-
-# Activate the virtual environment
-# Windows
-venv\Scripts\activate
-
-# macOS/Linux
-source venv/bin/activate
 ```
+Activate the virtual environment:
+- **Windows**: `venv\Scripts\activate`
+- **macOS/Linux**: `source venv/bin/activate`
 
-#### 3. Install Flask and Other Dependencies
-Create a `requirements.txt` file and add the following:
-```
-flask
-flask_sqlalchemy
-flask_marshmallow
-psycopg2
-```
-Install dependencies:
+#### 5. Install Dependencies
+
+Install required packages from `requirements.txt`:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 3: Set Up the Database
+#### 6. Set Up Environment Variables
 
-#### 1. Environment Variables
-Create a `.flaskenv` file:
+Create a `.env` file in the project root with the following content:
 ```
-FLASK_APP=main
-FLASK_DEBUG=1
-FLASK_RUN_PORT=8080
-DATABASE_URI=your-database-uri
+DATABASE_URI=<your-database-uri>
 ```
 
-#### 2. Run Database Commands
-Initialize the database:
+#### 7. Initialize the Database
+
+Run the following commands to create and seed the database:
 ```bash
 flask db create
 flask db seed
 ```
 
-### Step 4: Run the Application
-Start the server:
+#### 8. Start the Application
+
+Run the Flask app:
 ```bash
 flask run
 ```
+The app will be available at [http://127.0.0.1:8080](http://127.0.0.1:8080).
+
+## Functionality and Entity Descriptions
+
+### Mission
+
+- **Purpose**: Manage details of a mission.
+- **Validation**:
+  - `objective`: Minimum 3 characters, only alphanumeric and spaces.
+  - `location`: Same as `objective`.
+  - `datetime`: Must follow format `YYYY-MM-DD HH:MM:SS`.
+  - `status`: One of `Planning`, `Scheduled`, `In Progress`, `Completed - Success`.
+- **Sample Code**:
+```python
+new_mission = Mission(objective="Reconnaissance", location="Alpha Sector", datetime="2024-12-15 10:00:00", status="Scheduled")
+db.session.add(new_mission)
+db.session.commit()
+```
+
+### Jet
+
+- **Purpose**: Manage details of jets.
+- **Validation**:
+  - `model`: Alphanumeric with special characters, no spaces.
+  - `tail_no`: Must be in the format `NNNXXX`.
+  - `availability`: One of `Serviceable`, `Unserviceable`, `On Mission`.
+  - `capacity`: Integer.
+- **Sample Code**:
+```python
+new_jet = Jet(model="F16A", tail_no="123ABC", availability="Serviceable", capacity=1, last_maint="2024-11-20")
+db.session.add(new_jet)
+db.session.commit()
+```
+
+### Crew
+
+- **Purpose**: Manage crew groups.
+- **Validation**:
+  - `name`: Max 10 characters, starts with an uppercase letter, only letters.
+- **Sample Code**:
+```python
+new_crew = Crew(name="Alpha")
+db.session.add(new_crew)
+db.session.commit()
+```
+
+### Crew Member
+
+- **Purpose**: Manage individual crew members.
+- **Validation**:
+  - `name`: Must follow the format `Firstname Lastname`.
+  - `role`: One of `Pilot`, `Co-Pilot`, `Loadmaster`.
+  - `availability`: One of `Available`, `On Mission`, `On Leave`, `Unavailable`, `In Training`, `Retired`.
+- **Sample Code**:
+```python
+new_member = CrewMember(crew_id=1, name="John Doe", role="Pilot", availability="Available")
+db.session.add(new_member)
+db.session.commit()
+```
+
+### Assignment
+
+- **Purpose**: Link missions, jets, and crews.
+- **Validation**:
+  - `mission_id`, `jet_id`, `crew_id`: Must exist.
+  - Jet capacity matches crew size.
+  - One pilot per crew.
+  - Jet is `Serviceable`.
+  - Mission is in `Planning` status.
+- **Sample Code**:
+```python
+new_assignment = Assignment(mission_id=1, jet_id=2, crew_id=3)
+db.session.add(new_assignment)
+db.session.commit()
+```
+
+## Additional Notes
+
+- For any issues, refer to the Flask app logs or database logs.
+- Make sure your `.env` file is correctly configured for database connectivity.
 
 ---
-
-## How Entities Function
-
-### 1. Mission
-Handles mission-related operations like creating, updating, and deleting missions.
-
-#### Code Snippet for Creating a Mission
-```python
-@missions_bp.route("/", methods=["POST"])
-def create_mission():
-    body_data = MissionSchema().load(request.get_json())
-    new_mission = Mission(**body_data)
-    db.session.add(new_mission)
-    db.session.commit()
-    return MissionSchema().dump(new_mission), 201
-```
-
-#### Validation
-- Objective and location must be at least 3 characters.
-- Status must be one of `Planning`, `Scheduled`, `In Progress`, `Completed - Success`.
-
-### 2. Jet
-Manages details about aircraft used in missions.
-
-#### Code Snippet for Fetching Jets
-```python
-@jets_bp.route("/", methods=["GET"])
-def get_jets():
-    jets = Jet.query.all()
-    return jets_schema.dump(jets)
-```
-
-#### Validation
-- Tail number must match the format `123ABC`.
-- Availability must be one of `Serviceable`, `Unserviceable`, `On Mission`.
-
-### 3. Crew
-Represents teams available for assignments.
-
-#### Code Snippet for Updating a Crew
-```python
-@crews_bp.route("/<int:crew_id>", methods=["PUT"])
-def update_crew(crew_id):
-    crew = Crew.query.get_or_404(crew_id)
-    body_data = request.get_json()
-    crew.name = body_data.get("name", crew.name)
-    db.session.commit()
-    return crew_schema.dump(crew)
-```
-
-#### Validation
-- Crew names must start with a capital letter and be less than 10 characters.
-
-### 4. CrewMember
-Manages individual crew member data.
-
-#### Code Snippet for Validating a CrewMember
-```python
-@validates("crew_id")
-def validate_crew_id(self, value):
-    if not Crew.query.get(value):
-        raise ValidationError("Crew with this ID does not exist.")
-```
-
-#### Validation
-- Role must be one of `Pilot`, `Co-Pilot`, `Loadmaster`.
-- Name must have a first and last name with each starting with a capital letter.
-
-### 5. Assignment
-Links missions, jets, and crews.
-
-#### Code Snippet for Deleting an Assignment
-```python
-@assignments_bp.route("/<int:assign_id>", methods=["DELETE"])
-def delete_assignment(assign_id):
-    assignment = Assignment.query.get_or_404(assign_id)
-    db.session.delete(assignment)
-    db.session.commit()
-    return {"message": "Assignment deleted successfully."}
-```
-
-#### Validation
-- Jet capacity must match the crew size.
-- Each assignment must include one pilot.
-- Jet must be serviceable.
-- Mission status must be `Planning`.
-
----
-
-## Notes
-- Always ensure the `.flaskenv` file is properly configured.
-- For database operations, use the provided CLI commands in `cli_controller.py`.
-- Refer to individual controller files for specific endpoints and operations.
-
-Enjoy building and managing missions!
+End of README
 
