@@ -47,6 +47,16 @@ def get_assignment(assign_id):
 def create_assignment():
     try:
         body_data = AssignmentSchema().load(request.get_json())
+
+        # Ensure id's are integers
+        mission_id = body_data.get("mission_id")
+        jet_id = body_data.get("jet_id")
+        crew_id = body_data.get("crew_id")
+        
+        if not isinstance(mission_id, int) or not isinstance(jet_id, int) or not isinstance(crew_id, int):
+            return {"message": "mission_id, jet_id, and crew_id must be integers."}, 400
+
+        # Continue with assignment creation
         new_assignment = create_or_update_assign(Assignment(), body_data)
         db.session.add(new_assignment)
         db.session.commit()

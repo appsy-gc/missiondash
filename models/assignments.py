@@ -11,6 +11,7 @@ class ValidatedInteger(fields.Integer):
     def __init__(self, **kwargs):
         super().__init__(
             required=True,
+            strict=True,
             error_messages={"required": "This field is required and must be a valid integer."},
             **kwargs
         )
