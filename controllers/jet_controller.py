@@ -18,7 +18,7 @@ def jet_not_found(jet_id):
 
 # Function to create or update information
 def create_or_update_jet(jet, body_data):
-    for attr in ["model", "tail_no", "availability", "last_maint"]:
+    for attr in ["model", "tail_no", "availability", "capacity", "last_maint"]:
         setattr(jet, attr, body_data.get(attr, getattr(jet, attr)))
     return jet
 

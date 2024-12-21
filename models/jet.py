@@ -14,9 +14,10 @@ class Jet(db.Model):
     __tablename__ = "jets"
 
     jet_id = db.Column(db.Integer, primary_key=True)
-    model = db.Column(db.String, nullable=False)
-    tail_no = db.Column(db.String, nullable=False, unique=True)
-    availability = db.Column(db.String, nullable=False)
+    model = db.Column(db.String(50), nullable=False)
+    tail_no = db.Column(db.String(6), nullable=False, unique=True)
+    availability = db.Column(db.String(50), nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
     last_maint = db.Column(db.Date, nullable=False)
     assignments = db.relationship("Assignment", back_populates="jet", cascade="all, delete-orphan")
 
@@ -44,7 +45,7 @@ class JetSchema(ma.Schema):
     last_maint = fields.Date(format="%Y-%m-%d", required=True)
      
     class Meta:
-        fields = ("jet_id", "model", "tail_no", "availability", "last_maint")
+        fields = ("jet_id", "model", "tail_no", "availability", "capacity", "last_maint")
         ordered = True
 
 jet_schema = JetSchema()

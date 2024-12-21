@@ -48,48 +48,39 @@ def seed_tables():
             model="F16A",
             tail_no ="696VFR",
             availability="Serviceable",
+            capacity=1,
             last_maint="2024-12-01"
         ),
         Jet(
             model="B2Bomber",
             tail_no ="222BOB",
-            availability="On Mission",
+            availability="Serviceable",
+            capacity=2,
             last_maint="2024-11-15"
         ),
         Jet(
-            model="F22",
-            tail_no ="022RAP",
+            model="C17Globemaster",
+            tail_no ="001GBM",
             availability="Serviceable",
-            last_maint="2024-10-25"
-        ),
-        Jet(
-            model="XWing",
-            tail_no ="999XWG",
-            availability="Unserviceable",
-            last_maint="2024-12-10"
-        ),
-        Jet(
-            model="Raptor7",
-            tail_no ="007RAP",
-            availability="Serviceable",
+            capacity=3,
             last_maint="2024-11-30"
         )
     ]
     crews = [
         Crew(
-            name="Alpha"
+            name="Alpha" # Pilot only
         ),
         Crew(
-            name="Beta"
+            name="Bravo" # Pilot and Co-pilot
         ),
         Crew(
-            name="Charlie"
+            name="Charlie" # Pilot, Co-pilot and Loadmaster
         ),
         Crew(
-            name="Delta"
+            name="Delta" # Pilot only
         ),
         Crew(
-            name="Echo"
+            name="Echo" # Pilot and Co-pilot
         )
     ]
     db.session.add_all(crews)
@@ -103,35 +94,53 @@ def seed_tables():
             availability="Available"
         ),
         CrewMember(
-            crew_id=1,
+            crew_id=2,
             name="Alice Johnson",
-            role="Commander",
-            availability="On Mission"
+            role="Co-pilot",
+            availability="Available"
         ),
         CrewMember(
-            crew_id=2,
+            crew_id=3,
             name="Robert Brown",
-            role="Flight Engineer",
-            availability="In Training"
+            role="Co-pilot",
+            availability="Available"
         ),
         CrewMember(
-            crew_id=2,
+            crew_id=3,
             name="Emily Davis",
-            role="Navigator",
-            availability="On Leave"
+            role="Pilot",
+            availability="Available"
         ),
         CrewMember(
             crew_id=3,
             name="Michael Taylor",
-            role="Weapons Specialist",
-            availability="Unavailable"
+            role="Loadmaster",
+            availability="Available"
         ),
         CrewMember(
-            crew_id=3,
+            crew_id=2,
             name="Sarah Wilson",
             role="Pilot",
-            availability="Retired"
-        )
+            availability="Available"
+        ),
+        CrewMember(
+            crew_id=4,
+            name="Barry Allen",
+            role="Pilot",
+            availability="Available"
+        ),
+        CrewMember(
+            crew_id=5,
+            name="Jessica Black",
+            role="Pilot",
+            availability="Available"
+        ),
+        CrewMember(
+            crew_id=5,
+            name="Jeff Stallion",
+            role="Co-pilot",
+            availability="Available"
+        ),
     ]
 
     db.session.add_all(missions)
@@ -152,7 +161,7 @@ def seed_tables():
         Assignment(
             jet_id=2,
             mission_id=3,
-            crew_id=5
+            crew_id=2
         )
     ]
     db.session.add_all(assignments)

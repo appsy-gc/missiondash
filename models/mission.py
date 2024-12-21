@@ -20,10 +20,10 @@ class Mission(db.Model):
     __tablename__ = "missions"
 
     mission_id = db.Column(db.Integer, primary_key=True)
-    objective = db.Column(db.String, nullable=False)
-    location = db.Column(db.String, nullable=False)
+    objective = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
     assignments = db.relationship("Assignment", back_populates="mission", cascade="all, delete-orphan")
 
 class MissionSchema(ma.Schema):

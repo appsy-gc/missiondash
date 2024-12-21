@@ -4,7 +4,7 @@ from marshmallow.validate import Length, Regexp, OneOf
 from models.crew import Crew
 
 
-VALID_ROLES = ("Pilot", "Commander", "Flight Engineer", "Navigator", "Weapons Specialist")
+VALID_ROLES = ("Pilot", "Co-Pilot", "Loadmaster")
 VALID_AVAILABILITY = ("Available","On Mission", "On Leave", "Unavailable", "In Training", "Retired")
 
 class CrewMember(db.Model):
@@ -15,7 +15,7 @@ class CrewMember(db.Model):
     crew = db.relationship("Crew", back_populates="crew_members")
     name = db.Column(db.String(100), nullable=False, unique=True)
     role = db.Column(db.String(100), nullable=False)
-    availability = db.Column(db.String, nullable=False)
+    availability = db.Column(db.String(100), nullable=False)
 
 class CrewMemberSchema(ma.Schema):
     # Validation for crew member name

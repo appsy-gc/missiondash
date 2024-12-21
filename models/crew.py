@@ -6,7 +6,7 @@ class Crew(db.Model):
     __tablename__ = "crews"
 
     crew_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     crew_members = db.relationship("CrewMember", back_populates="crew", cascade="all, delete-orphan")
     assignments = db.relationship("Assignment", back_populates="crew", cascade="all, delete-orphan")
 
