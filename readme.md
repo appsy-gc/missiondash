@@ -1,8 +1,23 @@
 # App README
 
+## Public Deployments
+### Database
+**Neon:**
+- Database name: missiondash_db
+- User: mission_dev
+
+### Web Service
+**Render:** https://missiondash.onrender.com
+
 ## Purpose
 
 This application manages missions, jets, crews, crew members, and their assignments in a flight operation context. It allows users to create, update, retrieve, and delete data related to these entities while ensuring all validation rules are enforced. This app is built using Python, Flask, and SQLAlchemy with Marshmallow for schema validation.
+
+## Database
+PostgreSQL will be used as the database in this project as its relational nature suits the structured data model and complex relationships between entities.
+
+It is more appropriate than MongoDB for transactional data requiring strict consistency (e.g., mission assignments).
+
 
 ## Entities and Relationships
 
@@ -108,6 +123,7 @@ flask run
 The app will be available at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 ## Functionality and Entity Descriptions
+Each entity features all **CRUD** operations.
 
 ### Mission
 
@@ -170,6 +186,7 @@ db.session.commit()
 - **Purpose**: Link missions, jets, and crews.
 - **Validation**:
   - `mission_id`, `jet_id`, `crew_id`: Must exist.
+  - The combinaton of all three ID's must be unique. For example, `mission_id=1`, `jet_id=1`, `crew_id=1` can only be added once. Trying to add the same combination again will result in an error.
   - Jet capacity matches crew size.
   - One pilot per crew.
   - Jet is `Serviceable`.
@@ -182,8 +199,9 @@ db.session.commit()
 ```
 
 ## Feedback
+The following feedback was gathered and implemented during the planning and development phase.
 
-### General Feedback
+### Planning Feedback
 
 - **Strengths**:
   - The purpose is clear and well-articulated, making it easy to understand the project's goals.
