@@ -4,7 +4,17 @@ from models.mission import Mission
 from models.jet import Jet
 from models.crew import Crew
 from models.crew_member import CrewMember
+from datetime import datetime, timezone
 from marshmallow.validate import Length, Regexp, OneOf
+
+class ValidatedInteger(fields.Integer):
+    def __init__(self, **kwargs):
+        super().__init__(
+            required=True,
+            error_messages={"required": "This field is required and must be a valid integer."},
+            **kwargs
+        )
+
 
 def validate_id(model, value, field_name):
     # Check if the ID is an integer and not empty
@@ -29,6 +39,10 @@ class Assignment(db.Model):
     
 
 class AssignmentSchema(ma.Schema):
+    # Id's required
+    mission_id = ValidatedInteger()
+    jet_id = ValidatedInteger()
+    crew_id = ValidatedInteger()
 
     mission = fields.Nested("MissionSchema", exclude=["mission_id"])
     jet = fields.Nested("JetSchema", exclude=["jet_id"])
@@ -116,6 +130,18 @@ class AssignmentSchema(ma.Schema):
         if mission.status not in ["Planning"]:
             raise ValidationError(
                 f"The mission is currently {mission.status.lower()} and cannot be scheduled",
+                field_name="mission_id"
+            )
+        
+        # 6. Check that mission date is not in the future
+        if mission.datetime.tzinfo is None:  
+            mission_datetime = mission.datetime.replace(tzinfo=timezone.utc)
+        else:
+            mission_datetime = mission.datetime
+
+        if mission_datetime > datetime.now(timezone.utc):
+            raise ValidationError(
+                f"Starting mission too soon. Start mission at {mission.datetime} or change the mission planned date time",
                 field_name="mission_id"
             )
 

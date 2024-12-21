@@ -25,7 +25,7 @@ def create_or_update_mission(mission, body_data):
 # Read all - /missions - GET
 @missions_bp.route("/", methods=["GET"])
 def get_missions():
-    stmt = db.select(Mission)
+    stmt = db.select(Mission).order_by(Mission.mission_id)
     missions_list = db.session.scalars(stmt)
     data = MissionSchema(many=True).dump(missions_list)
     return data

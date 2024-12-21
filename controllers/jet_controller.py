@@ -25,7 +25,7 @@ def create_or_update_jet(jet, body_data):
 # Read all - /jets - GET
 @jets_bp.route("/", methods=["GET"])
 def get_jets():
-    stmt = db.select(Jet)
+    stmt = db.select(Jet).order_by(Jet.jet_id)
     jets_list = db.session.scalars(stmt)
     return JetSchema(many=True).dump(jets_list)
 

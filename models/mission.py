@@ -2,7 +2,7 @@ from init import db, ma
 from marshmallow import fields
 from marshmallow.validate import Length, And, Regexp, OneOf
 
-VALID_STATUSES = ("Planning", "Scheduled", "In Progress", "Completed - Success", "Completed - Failure")
+VALID_STATUSES = ("Planning", "Scheduled", "In Progress", "Completed - Success")
 
 # Define reusable schema field
 class ValidatedString(fields.String):

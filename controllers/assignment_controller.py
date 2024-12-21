@@ -1,6 +1,9 @@
 from flask import Blueprint, request
 from init import db
 from models.assignments import Assignment, AssignmentSchema
+from models.mission import Mission
+from models.jet import Jet
+from models.crew_member import CrewMember
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 from marshmallow.exceptions import ValidationError
@@ -47,7 +50,17 @@ def create_assignment():
         new_assignment = create_or_update_assign(Assignment(), body_data)
         db.session.add(new_assignment)
         db.session.commit()
-        return AssignmentSchema().dump(new_assignment)
+        # Update mission status
+        mission = db.session.get(Mission, body_data["mission_id"])
+        mission.status = "In Progress"
+        # Update jet availability
+        jet = db.session.get(Jet, body_data["jet_id"])
+        jet.availability = "On Mission"
+        # Update crew member availability
+        crew_members = CrewMember.query.filter_by(crew_id=body_data["crew_id"]).all()
+        for crew_member in crew_members:
+            crew_member.availability = "On Mission"
+        return AssignmentSchema().dump(new_assignment), 201
     except ValidationError as err:
         # Catch and handle validation errors
         return {"message": err.messages}, 400    
@@ -78,6 +91,16 @@ def delete_assignment(assign_id):
     assignment = get_assign_id(assign_id)
     if not assignment:
         return assign_not_found_message(assign_id)
+    # Update mission status
+    mission = assignment.mission
+    mission.status = "Completed - Success"
+    # Update jet availability
+    jet = assignment.jet
+    jet.availability = "Serviceable"
+    # Update crew member availability
+    crew_members = CrewMember.query.filter_by(crew_id=assignment.crew_id).all()
+    for crew_member in crew_members:
+        crew_member.availability = "Available"
     db.session.delete(assignment)
     db.session.commit()
     return {"message": f"Assignment with id: '{assign_id}' successfully deleted"}
